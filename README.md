@@ -1,4 +1,4 @@
-"# finance-api"
+FINANCE
 Para resolver a la recurrente pregunta “¿En qué se me fue el sueldo?” creamos FINANCE. Es una app dónde podrás registrar cada movimiento de dinero que hagas, para que siempre sepas en qué gastas y en base a esa información reducir o ajustar tus gastos.
 
 FUNCIONALIDADES:
@@ -12,6 +12,7 @@ ROLES:
 Usuario
 
 INSTRUCCIONES TÉCNICAS
+
 Ejecución:
 
 - npm install
