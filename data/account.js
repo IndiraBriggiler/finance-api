@@ -122,24 +122,7 @@ async function updateTotalAccount(account, amount, type, deleteOperation = false
     .db("Finance")
     .collection("Accounts")
     .updateOne(query, newTransaction);
-  //preguntarle al profe si validamos con los resultados
 }
-// async function updateAccount(account, userId){
-//   let resultAdd = undefined;
-//   const updateOperation = true;
-//   let result = "";
-//   const resultDelete = await deleteAccount(account._id);
-//   if(resultDelete == "Se borro la cuenta"){
-//     console.log("se borro la cuenta")
-//     resultAdd = await addAccount(account, userId, updateOperation);
-//   }
-//   if (resultAdd) {
-//     result = "Se modifico la cuenta con exito";
-//   } else {
-//     result = "No se pudo modificar la cuenta";
-//   }
-//   return result;
-// }
 
 module.exports = {
   getAccounts,
@@ -148,5 +131,4 @@ module.exports = {
   deleteAccounts,
   deleteAccount,
   updateTotalAccount,
-  //updateAccount
 };

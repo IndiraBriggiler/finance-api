@@ -7,6 +7,7 @@ const { addCategories, deleteCategories} = require('./category');
 const {addAccounts, deleteAccounts} = require('./account');
 const {addTransactions, deleteTransactions} = require('./transaction');
 const {addTransfers, deleteTransfers} = require('./transfer');
+require('dotenv').config();
 
 async function getUser(id){
     const connectiondb = await connection.getConnection();
@@ -100,7 +101,7 @@ async function findByCredential(email, password){
 
 function generateAuthToken(user){
     //se pasa primero el usuario que tiene que tenerlo asignado, pasarle una clave secreta de nuestra aplicacion, tiempo de expiracion
-    const token = jwt.sign({_id: user._id}, 'ultrasecreta'); //{expiresIn: '2h'} );
+    const token = jwt.sign({_id: user._id}, process.env.SECRET); //{expiresIn: '2h'} );
     return token;
 }
 

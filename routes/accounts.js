@@ -15,18 +15,6 @@ router.get("/:id", auth, async (req, res) => {
   }
 });
 
-//HACER EL FILTRO POR ID DE CUENTA
-
-// router.get("/:id", auth, async (req, res) => {
-//   const account = await data.getAccount(req.params.id);
-//   console.log(account);
-//   if (account) {
-//     res.json(account);
-//   } else {
-//     res.status(404).send("Cuenta no encontrada");
-//   }
-// });
-
 router.post("/:id", auth, async (req, res) => {
   let validation = accountCreate.validate(req.body);
   if (validation.error) {
@@ -41,10 +29,5 @@ router.delete("/:id", auth, async (req, res) => {
   const result = await data.deleteAccount(req.params.id);
   res.send(result);
 });
-
-// router.put("/:id", auth, async (req, res) => {
-//   const result = await data.updateAccount(req.params.id, req.body);
-//   res.send(result);
-// });
 
 module.exports = router;
