@@ -14,13 +14,19 @@ async function addCategories(userId) {
 }
 async function getCategory(categoryId) {
     const connectiondb = await connection.getConnection();
-    console.log(categoryId)
     const query = {"categories._id": new objectId(categoryId)};
     const options = {
         projection: {_id: 0, categories: {$elemMatch: {_id: new objectId(categoryId)}}}
     }
     const result = await connectiondb.db('Finance').collection('Categories').findOne(query, options)
     console.log(result);
+    return result;
+}
+
+async function getCategories(userId){
+    const connectiondb = await connection.getConnection();
+    const query = {userId : new objectId(userId)}
+    const result = await connectiondb.db('Finance').collection('Categories').findOne(query)
     return result;
 }
 async function addCategory(category, userId) {
@@ -56,11 +62,12 @@ async function deleteCategories(userId) {
     const result = await connectiondb.db('Finance').collection('Categories').deleteOne({ userId: new objectId(userId) });
     return result;
 }
-async function updateCategoryTotal(date, category, amount, type, deleteOperation = false) {
+async function updateCategoryTotal(date, category, amount, deleteOperation = false) {
     date = new Date(date);
     const connectiondb = await connection.getConnection();
-    if (deleteOperation) {
+    if (deleteOperation == true) {
         amount = amount * -1;
+        console.log("entre al if de category")
     }
     const query = { "categories._id": new objectId(category) };
     let path = `categories.$.total.${date.getFullYear()}.${date.getMonth()}`
@@ -103,5 +110,7 @@ async function updateCategory(categoryId, category){
     }
     return result;
 }
-module.exports = { addCategories, deleteCategories, updateCategoryTotal, deleteCategory, addCategory, getCategory, updateCategory };
+
+
+module.exports = { addCategories, deleteCategories, updateCategoryTotal, deleteCategory, addCategory, getCategory, updateCategory, getCategories };
 

@@ -2,24 +2,17 @@ const connection = require("./connection");
 const objectId = require("mongodb").ObjectId;
 const { updateAccount } = require("./account");
 
-async function addTransfers(transfer, userId) {
-  transfer._id = new objectId();
+async function addTransfers(userId) {
   const connectiondb = await connection.getConnection();
-  const query = { userId: new objectId(userId) };
-  const newTransfer = { $push: { transfers: transfer } };
-  let result = await connectiondb
+  const transfers = {
+    userId: userId,
+    transfers_count: 0,
+    transfers: [],
+  };
+  const result = await connectiondb
     .db("Finance")
     .collection("Transfers")
-    .updateOne(query, newTransfer);
-
-  if (result.result.nModified > 0) {
-    updateAccount(transfer.incomeAccountId, transfer.amount, "ingreso");
-    updateAccount(transfer.outcomeAccountId, transfer.amount, "egreso");
-
-    result = "se agrego la transaccion";
-  } else {
-    result = "No se ha podido agregar la transaccion";
-  }
+    .insertOne(transfers);
   return result;
 }
 

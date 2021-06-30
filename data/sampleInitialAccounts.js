@@ -1,6 +1,6 @@
 const objectId = require('mongodb').ObjectId;
 
-const sampleAccounts = [
+let sampleAccounts = [
     {
         _id: new objectId(),
         title: "Banco",

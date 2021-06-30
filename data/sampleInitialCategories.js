@@ -1,6 +1,6 @@
 const objectId = require('mongodb').ObjectId;
 
-const sampleCategories = [
+let sampleCategories = [
     {
         _id: new objectId(),
         active: true,

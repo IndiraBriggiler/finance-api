@@ -60,7 +60,7 @@ async function addTransaction(transaction, userId, updateOperation = false) {
   if (result.result.nModified > 0) {
     updateBalance(userId, transaction.amount, transaction.type);
     updateAccount(transaction.account, transaction.amount, transaction.type);
-    updateCategory(
+    updateCategoryTotal(
       transaction.date,
       transaction.category,
       transaction.amount,
@@ -85,10 +85,10 @@ async function deleteTransactions(userId) {
 async function deleteTransaction(transactionId) {
   const { type, category, amount, account, date, userId } =
     await getTransaction(transactionId);
-  console.log(amount);
+  console.log(userId);
   const connectiondb = await connection.getConnection();
   const deleteOperation = true;
-  const query = {};
+  const query = {userId: userId};
   const newTransaction = {
     $pull: { transactions: { _id: new objectId(transactionId) } },
   };
@@ -100,7 +100,7 @@ async function deleteTransaction(transactionId) {
   if (result.result.nModified > 0) {
     res = "Se borro la transaccion";
     updateBalance(userId, amount, type, deleteOperation);
-    updateCategoryTotal(date, category, amount, type, deleteOperation);
+    updateCategoryTotal(date, category, amount,deleteOperation);
     updateAccount(account, amount, type, deleteOperation);
   } else {
     res = "No se encontro la transaccion";
