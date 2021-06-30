@@ -38,4 +38,4 @@ async function updateBalance(userId, amount, type, deleteOperation = false ){
     await connectiondb.db('Finance').collection('Balances').updateOne(query , newValues);
     //preguntar al profe si tenemos que hacer validacion con los resultados.
 }
-module.exports = {addBalance, deleteBalance, updateBalance};
+module.exports = {addBalance, deleteBalance, updateBalance, getBalance};

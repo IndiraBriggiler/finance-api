@@ -10,6 +10,7 @@ var transactionsRouter = require("./routes/transactions");
 var categoriesRouter = require("./routes/categories");
 var transfersRouter = require("./routes/transfers");
 var accountsRouter = require("./routes/accounts");
+var balancesRouter = require('./routes/balances')
 
 var app = express();
 
@@ -29,6 +30,7 @@ app.use("/api/transactions", transactionsRouter);
 app.use("/api/categories", categoriesRouter);
 app.use("/api/transfers", transfersRouter);
 app.use("/api/accounts", accountsRouter);
+app.use("/api/balances", balancesRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

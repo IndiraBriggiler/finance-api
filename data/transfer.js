@@ -118,14 +118,14 @@ async function deleteTransfer(transferId) {
 
 async function updateTransfer(userId, transfer) {
   console.log("esta esla transfer", transfer);
+  let resultAdd = undefined;
   const updateOperation = true;
   let result = "";
   const resultDelete = await deleteTransfer(transfer._id);
-  const resultAdd = await addTransfer(transfer, userId, updateOperation);
-  if (
-    resultAdd === "Se agrego la transferencia" &&
-    resultDelete === "Se borro la transferencia"
-  ) {
+  if(resultDelete == "Se borro la transferencia"){
+    resultAdd = await addTransfer(transfer, userId, updateOperation);
+  }
+  if (resultAdd) {
     result = "Se modifico la transferencia con exito";
   } else {
     result = "No se pudo modificar la transferencia";
