@@ -1,7 +1,7 @@
 const connection = require("./connection");
 const objectId = require("mongodb").ObjectId;
 const { updateBalance } = require("./balance");
-const { updateAccount } = require("./account");
+const { updateTotalAccount } = require("./account");
 const { updateCategoryTotal } = require("./category");
 
 async function addTransactions(userId) {
@@ -59,7 +59,7 @@ async function addTransaction(transaction, userId, updateOperation = false) {
   //esta logica va en la ruta? o aca esta bien?
   if (result.result.nModified > 0) {
     updateBalance(userId, transaction.amount, transaction.type);
-    updateAccount(transaction.account, transaction.amount, transaction.type);
+    updateTotalAccount(transaction.account, transaction.amount, transaction.type);
     updateCategoryTotal(
       transaction.date,
       transaction.category,
@@ -101,7 +101,7 @@ async function deleteTransaction(transactionId) {
     res = "Se borro la transaccion";
     updateBalance(userId, amount, type, deleteOperation);
     updateCategoryTotal(date, category, amount,deleteOperation);
-    updateAccount(account, amount, type, deleteOperation);
+    updateTotalAccount(account, amount, type, deleteOperation);
   } else {
     res = "No se encontro la transaccion";
   }

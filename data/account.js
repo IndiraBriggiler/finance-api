@@ -1,6 +1,7 @@
 const connection = require("./connection");
 const sampleAccounts = require("./sampleInitialAccounts");
 const objectId = require("mongodb").ObjectId;
+const { updateBalance } = require("./balance");
 
 async function getAccounts(userId) {
   const connectiondb = await connection.getConnection();
@@ -21,7 +22,7 @@ async function getAccount(accountId) {
   const accounts = await connectiondb
     .db("Finance")
     .collection("Accounts")
-    .findOne({ "Accounts._id": new objectId(accountId) });
+    .findOne({ "accounts._id": new objectId(accountId) });
   if (accounts) {
     accountFind = accounts.accounts.find((account) => account._id == accountId);
     accountFind.userId = accounts.userId;
@@ -43,21 +44,33 @@ async function addAccounts(userId) {
   return result;
 }
 
-async function addAccount(account, userId) {
+async function addAccount({title, icon, balance = 0, _id = undefined}, userId, updateOperation = false ) {
   const connectiondb = await connection.getConnection();
-  account._id = new objectId();
-
+  let account = {};
+  if(!updateOperation){
+    account._id = new objectId();
+  }else{
+    account._id = new objectId(_id);
+  }
+  account.balance = balance;
+  account.icon = icon;
+  account.title = title;
+  console.log(account);
   const query = { userId: new objectId(userId) };
   const newAccount = { $push: { accounts: account } };
   let result = await connectiondb
     .db("Finance")
     .collection("Accounts")
     .updateOne(query, newAccount);
+  if(balance != 0){
+    updateBalance(userId, balance, "ingreso", updateOperation);
+  }
   if (result.result.nModified > 0) {
     result = "Se agrego la cuenta";
   } else {
-    result = "No se ha podido agregar la cuenta";
+    result = undefined;
   }
+
   return result;
 }
 
@@ -66,7 +79,7 @@ async function deleteAccount(accountId) {
   let res = "";
   if (account) {
     const connectiondb = await connection.getConnection();
-    const query = { accountId: new objectId(account._id) };
+    const query = { userId: new objectId(account.userId) };
     const newAccount = {
       $pull: { accounts: { _id: new objectId(accountId) } },
     };
@@ -85,14 +98,17 @@ async function deleteAccount(accountId) {
 
 async function deleteAccounts(userId) {
   const connectiondb = await connection.getConnection();
-  const result = await connectiondb
+  let result = await connectiondb
     .db("Finance")
     .collection("Accounts")
     .deleteOne({ userId: new objectId(userId) });
+  if(result.result.nModified > 0){
+    result = "Se borro la cuenta"
+  }
   return result;
 }
 
-async function updateAccount(account, amount, type, deleteOperation = false) {
+async function updateTotalAccount(account, amount, type, deleteOperation = false) {
   const connectiondb = await connection.getConnection();
   if (
     (type === "egreso" && !deleteOperation) ||
@@ -107,9 +123,23 @@ async function updateAccount(account, amount, type, deleteOperation = false) {
     .collection("Accounts")
     .updateOne(query, newTransaction);
   //preguntarle al profe si validamos con los resultados
-
-  console.log("final updateAccount");
 }
+// async function updateAccount(account, userId){
+//   let resultAdd = undefined;
+//   const updateOperation = true;
+//   let result = "";
+//   const resultDelete = await deleteAccount(account._id);
+//   if(resultDelete == "Se borro la cuenta"){
+//     console.log("se borro la cuenta")
+//     resultAdd = await addAccount(account, userId, updateOperation);
+//   }
+//   if (resultAdd) {
+//     result = "Se modifico la cuenta con exito";
+//   } else {
+//     result = "No se pudo modificar la cuenta";
+//   }
+//   return result;
+// }
 
 module.exports = {
   getAccounts,
@@ -117,5 +147,6 @@ module.exports = {
   addAccount,
   deleteAccounts,
   deleteAccount,
-  updateAccount,
+  updateTotalAccount,
+  //updateAccount
 };

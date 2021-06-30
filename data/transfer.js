@@ -1,6 +1,6 @@
 const connection = require("./connection");
 const objectId = require("mongodb").ObjectId;
-const { updateAccount } = require("./account");
+const { updateTotalAccount } = require("./account");
 
 async function addTransfers(userId) {
   const connectiondb = await connection.getConnection();
@@ -30,8 +30,8 @@ async function addTransfer(transfer, userId, updateOperation = false) {
     .collection("Transfers")
     .updateOne(query, newTransfer);
   if (result.result.nModified > 0) {
-    updateAccount(transfer.incomeAccountId, transfer.amount, "ingreso");
-    updateAccount(transfer.outcomeAccountId, transfer.amount, "egreso");
+    updateTotalAccount(transfer.incomeAccountId, transfer.amount, "ingreso");
+    updateTotalAccount(transfer.outcomeAccountId, transfer.amount, "egreso");
     result = "Se agrego la transferencia";
   } else {
     result = "No se ha podido agregar la transferencia";
@@ -95,13 +95,13 @@ async function deleteTransfer(transferId) {
       .updateOne(query, newTransfer);
     if (result.result.nModified > 0) {
       res = "Se borro la transferencia";
-      updateAccount(
+      updateTotalAccount(
         transfer.incomeAccountId,
         transfer.amount,
         "ingreso",
         deleteOperation
       );
-      updateAccount(
+      updateTotalAccount(
         transfer.outcomeAccountId,
         transfer.amount,
         "egreso",

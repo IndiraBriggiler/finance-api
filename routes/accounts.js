@@ -42,9 +42,9 @@ router.delete("/:id", auth, async (req, res) => {
   res.send(result);
 });
 
-router.put("/:id", auth, async (req, res) => {
-  const result = await data.updateAccount(req.params.id, req.body);
-  res.send(result);
-});
+// router.put("/:id", auth, async (req, res) => {
+//   const result = await data.updateAccount(req.params.id, req.body);
+//   res.send(result);
+// });
 
 module.exports = router;

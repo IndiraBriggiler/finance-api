@@ -6,7 +6,7 @@ const accountCreate = joi.object({
     .object()
     .keys({ type: joi.string().required(), name: joi.string().required() })
     .required(),
-  balance: joi.number().min(0.1).required(),
+  balance: joi.number().min(0.1)
 });
 
 module.exports = accountCreate;
