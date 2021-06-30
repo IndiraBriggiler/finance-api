@@ -2,8 +2,9 @@ var express = require("express");
 var router = express.Router();
 const data = require("../data/transfer");
 const schemaTransferCreate = require("../schema/transferCreate");
+const auth = require("../middleware/auth");
 
-router.get("/:id", async (req, res) => {
+router.get("/:id",auth, async (req, res) => {
   const transfers = await data.getTransfers(req.params.id);
   console.log(transfers);
   if (transfers) {
@@ -18,7 +19,7 @@ router.post("/:id", async (req, res) => {
   if (validation.error) {
     res.status(400).send(validation.error.details[0].message);
   } else {
-    const result = await data.addTransfers(req.body, req.params.id);
+    const result = await data.addTransfer(req.body, req.params.id);
     res.send(result);
   }
 });

@@ -135,6 +135,7 @@ async function updateTransfer(userId, transfer) {
 
 module.exports = {
   addTransfers,
+  addTransfer,
   deleteTransfers,
   getTransfers,
   deleteTransfer,
