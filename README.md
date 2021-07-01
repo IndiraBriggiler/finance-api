@@ -18,9 +18,6 @@ Ejecución:
 - npm install
 - npn start
 
-//FALTA//
-Setear los valores: …. En las variables de entorno:
-
 ENDPOINDS DE LA API:
 
     USUARIO:
@@ -50,10 +47,9 @@ ENDPOINDS DE LA API:
         MODIFICAR
         PUT /api/transactions/userId
 
-//VER BIEN //
-CATEGORIAS:
-OBTENER
-GET /api/categories/id
+      CATEGORIAS:
+        OBTENER
+        GET /api/categories/id
 
         AGREGAR
         POST /api/categories
